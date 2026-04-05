@@ -116,13 +116,11 @@
         <!-- Logo -->
         <div class="flex items-center gap-3 mb-8">
             <div class="logo-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" fill="white" opacity="0.9"/>
-                </svg>
+                <img src="./public/images/laravel-log.png" alt="Laravel Logo">
             </div>
             <div>
-                <div style="font-family:'DM Mono',monospace" class="text-white font-medium text-lg tracking-tight">Nexus</div>
-                <div class="text-xs" style="color:rgba(255,255,255,0.3)">Real-time Chat</div>
+                <div style="font-family:'DM Mono',monospace" class="text-white font-medium text-lg tracking-tight"></div>
+                <div class="text-xs" style="color:rgba(255,255,255,0.3)">Laravel Real Time Chat App</div>
             </div>
         </div>
 

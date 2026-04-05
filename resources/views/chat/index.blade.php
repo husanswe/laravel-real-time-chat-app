@@ -3,276 +3,374 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Chat — Login</title>
+    <title>Laravel Real Time Chat</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        * { font-family: 'DM Sans', sans-serif; }
+        * { font-family: 'DM Sans', sans-serif; box-sizing: border-box; }
         body {
             background: #0a0e1a;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            height: 100vh;
             overflow: hidden;
+            display: flex;
         }
-        .bg-mesh {
-            position: fixed;
-            inset: 0;
-            background: 
-                radial-gradient(ellipse 80% 60% at 20% 50%, rgba(41, 121, 255, 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 80% at 80% 20%, rgba(0, 212, 170, 0.06) 0%, transparent 60%),
-                radial-gradient(ellipse 40% 40% at 60% 80%, rgba(120, 80, 255, 0.05) 0%, transparent 50%);
-            pointer-events: none;
+ 
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            min-width: 260px;
+            background: rgba(12, 17, 30, 0.95);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
-        .grid-bg {
-            position: fixed;
-            inset: 0;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 40px 40px;
-            pointer-events: none;
-        }
-        .card {
-            background: rgba(15, 20, 35, 0.85);
-            border: 1px solid rgba(255,255,255,0.07);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03);
-        }
-        .input-field {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            color: #e8eaf0;
-            transition: all 0.2s ease;
-            outline: none;
-        }
-        .input-field:focus {
-            border-color: rgba(41, 121, 255, 0.5);
-            background: rgba(41, 121, 255, 0.05);
-            box-shadow: 0 0 0 3px rgba(41, 121, 255, 0.08);
-        }
-        .input-field::placeholder { color: rgba(255,255,255,0.2); }
-        .btn-primary {
-            background: linear-gradient(135deg, #2979ff 0%, #1a56e8 100%);
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 20px rgba(41, 121, 255, 0.3);
-        }
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 28px rgba(41, 121, 255, 0.45);
-        }
-        .btn-primary:active { transform: translateY(0); }
-        .tab-btn {
-            transition: all 0.2s ease;
-            color: rgba(255,255,255,0.35);
-        }
-        .tab-btn.active {
-            color: #fff;
-            border-bottom: 2px solid #2979ff;
+        .sidebar-header {
+            padding: 20px 18px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .logo-icon {
-            width: 42px;
-            height: 42px;
+            width: 34px;
+            height: 34px;
             background: linear-gradient(135deg, #2979ff, #00d4aa);
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
-        .fade-in {
-            animation: fadeIn 0.4s ease forwards;
+        .room-item {
+            padding: 10px 18px;
+            cursor: pointer;
+            transition: background 0.15s;
+            border-radius: 0;
         }
+        .room-item:hover { background: rgba(255,255,255,0.04); }
+        .room-item.active { background: rgba(41, 121, 255, 0.1); }
+        .room-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #2979ff;
+            flex-shrink: 0;
+        }
+        .user-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 18px;
+        }
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00d4aa;
+            flex-shrink: 0;
+        }
+ 
+        /* Main chat area */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: #0d1120;
+        }
+        .chat-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            background: rgba(12, 17, 30, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .messages-container::-webkit-scrollbar { width: 4px; }
+        .messages-container::-webkit-scrollbar-track { background: transparent; }
+        .messages-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+ 
+        .message-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .message-group.own {
+            flex-direction: row-reverse;
+        }
+        .msg-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            flex-shrink: 0;
+            align-self: flex-end;
+        }
+        .msg-content { max-width: 65%; }
+        .msg-name {
+            font-size: 11px;
+            color: rgba(255,255,255,0.35);
+            margin-bottom: 4px;
+            padding-left: 2px;
+        }
+        .message-group.own .msg-name { text-align: right; padding-right: 2px; }
+        .bubble {
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+        .bubble.other {
+            background: rgba(255,255,255,0.07);
+            color: #e0e4f0;
+            border-bottom-left-radius: 4px;
+        }
+        .bubble.own {
+            background: linear-gradient(135deg, #2979ff, #1a56e8);
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+        .msg-time {
+            font-size: 10px;
+            color: rgba(255,255,255,0.2);
+            margin-top: 3px;
+            padding: 0 2px;
+        }
+        .message-group.own .msg-time { text-align: right; }
+ 
+        /* Input area */
+        .input-area {
+            padding: 16px 24px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            background: rgba(12, 17, 30, 0.8);
+        }
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 4px 4px 4px 16px;
+            transition: border-color 0.2s;
+        }
+        .input-wrapper:focus-within {
+            border-color: rgba(41, 121, 255, 0.4);
+        }
+        .msg-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #e0e4f0;
+            font-size: 14px;
+            padding: 10px 0;
+            resize: none;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .msg-input::placeholder { color: rgba(255,255,255,0.2); }
+        .send-btn {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #2979ff, #1a56e8);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .send-btn:hover { transform: scale(1.05); box-shadow: 0 4px 16px rgba(41,121,255,0.4); }
+        .send-btn:active { transform: scale(0.97); }
+ 
+        /* System message */
+        .system-msg {
+            text-align: center;
+            font-size: 11px;
+            color: rgba(255,255,255,0.2);
+            padding: 8px 0;
+            font-style: italic;
+        }
+ 
+        /* Date divider */
+        .date-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        .date-divider::before, .date-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+        }
+        .date-divider span {
+            font-size: 11px;
+            color: rgba(255,255,255,0.2);
+            white-space: nowrap;
+        }
+ 
+        /* Logout btn */
+        .logout-btn {
+            background: rgba(255,80,80,0.08);
+            border: 1px solid rgba(255,80,80,0.15);
+            color: rgba(255,100,100,0.7);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .logout-btn:hover {
+            background: rgba(255,80,80,0.15);
+            color: #ff6464;
+        }
+ 
+        .fade-in { animation: fadeIn 0.3s ease; }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+ 
+        /* Typing indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            border-bottom-left-radius: 4px;
+            width: fit-content;
         }
-        .error-msg {
-            color: #ff6b6b;
-            font-size: 12px;
-            margin-top: 4px;
-            display: none;
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            animation: typingBounce 1.2s infinite;
         }
-        .success-msg {
-            background: rgba(0, 212, 170, 0.08);
-            border: 1px solid rgba(0, 212, 170, 0.2);
-            color: #00d4aa;
-            border-radius: 8px;
-            padding: 10px 14px;
-            font-size: 13px;
-            display: none;
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
+            30% { transform: translateY(-4px); opacity: 1; }
         }
-    </style>
+</style>
 </head>
+
 <body>
-    <div class="bg-mesh"></div>
-    <div class="grid-bg"></div>
-
-    <div class="card rounded-2xl w-full max-w-sm mx-4 p-8 fade-in relative z-10">
-        <!-- Logo -->
-        <div class="flex items-center gap-3 mb-8">
-            <div class="logo-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" fill="white" opacity="0.9"/>
-                </svg>
-            </div>
-            <div>
-                <div style="font-family:'DM Mono',monospace" class="text-white font-medium text-lg tracking-tight">Nexus</div>
-                <div class="text-xs" style="color:rgba(255,255,255,0.3)">Real-time chat</div>
-            </div>
-        </div>
-
-        <!-- Tabs -->
-        <div class="flex gap-6 mb-6 border-b border-white/5 pb-0">
-            <button class="tab-btn active pb-3 text-sm font-medium" onclick="switchTab('login')">Sign in</button>
-            <button class="tab-btn pb-3 text-sm font-medium" onclick="switchTab('signup')">Create account</button>
-        </div>
-
-        <!-- Success message -->
-        <div class="success-msg mb-4" id="successMsg">Account created! You can now sign in.</div>
-
-        <!-- Login Form -->
-        <form id="loginForm" class="space-y-4" onsubmit="handleLogin(event)">
-            <div>
-                <label class="block text-xs mb-1.5" style="color:rgba(255,255,255,0.4)">Email</label>
-                <input type="email" id="loginEmail" placeholder="you@example.com" 
-                    class="input-field w-full rounded-xl px-4 py-3 text-sm">
-                <div class="error-msg" id="loginEmailError">Enter a valid email</div>
-            </div>
-            <div>
-                <div class="flex justify-between items-center mb-1.5">
-                    <label class="block text-xs" style="color:rgba(255,255,255,0.4)">Password</label>
-                    <a href="#" class="text-xs" style="color:#2979ff">Forgot?</a>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="flex items-center gap-2.5">
+                <div class="logo-icon">
+                    
                 </div>
-                <input type="password" id="loginPassword" placeholder="••••••••" 
-                    class="input-field w-full rounded-xl px-4 py-3 text-sm">
-                <div class="error-msg" id="loginError">Invalid email or password</div>
+                <span style="font-family:'DM Mono',monospace;color:#fff;font-size:15px;font-weight:500;letter-spacing:-0.3px">
+                    Laravel Real Time Chat App 
+                </span>
             </div>
-            <button type="submit" class="btn-primary w-full rounded-xl py-3 text-sm font-medium text-white mt-2">
-                Sign in
-            </button>
-        </form>
-
-        <!-- Signup Form -->
-        <form id="signupForm" class="space-y-4 hidden" onsubmit="handleSignup(event)">
-            <div>
-                <label class="block text-xs mb-1.5" style="color:rgba(255,255,255,0.4)">Full name</label>
-                <input type="text" id="signupName" placeholder="John Doe" 
-                    class="input-field w-full rounded-xl px-4 py-3 text-sm">
-                <div class="error-msg" id="signupNameError">Name is required</div>
+        </div>
+ 
+        <!-- Rooms -->
+        <div class="py-3">
+            <div class="px-5 mb-2">
+                <span class="text-xs font-medium tracking-widest uppercase" style="color:rgba(255,255,255,0.2)">Rooms</span>
             </div>
-            <div>
-                <label class="block text-xs mb-1.5" style="color:rgba(255,255,255,0.4)">Email</label>
-                <input type="email" id="signupEmail" placeholder="you@example.com" 
-                    class="input-field w-full rounded-xl px-4 py-3 text-sm">
-                <div class="error-msg" id="signupEmailError">Enter a valid email</div>
+            <div class="room-item active flex items-center gap-3">
+                <div class="room-dot"></div>
+                <span class="text-sm" style="color:#fff"># general</span>
             </div>
-            <div>
-                <label class="block text-xs mb-1.5" style="color:rgba(255,255,255,0.4)">Password</label>
-                <input type="password" id="signupPassword" placeholder="Min. 6 characters" 
-                    class="input-field w-full rounded-xl px-4 py-3 text-sm">
-                <div class="error-msg" id="signupPasswordError">Password must be at least 6 characters</div>
+        </div>
+ 
+        <div style="height:1px;background:rgba(255,255,255,0.04);margin:0 18px"></div>
+ 
+        <!-- Online users -->
+        <div class="py-3 flex-1">
+            <div class="px-5 mb-2">
+                <span class="text-xs font-medium tracking-widest uppercase" style="color:rgba(255,255,255,0.2)">Online — <span id="onlineCount">1</span></span>
             </div>
-            <button type="submit" class="btn-primary w-full rounded-xl py-3 text-sm font-medium text-white mt-2">
-                Create account
-            </button>
-        </form>
-
-        <div class="divider mt-6 mb-4"></div>
-        <p class="text-center text-xs" style="color:rgba(255,255,255,0.2)">Up to 5 users · End-to-end encrypted</p>
+            <div id="onlineUsers"></div>
+        </div>
+ 
+        <!-- Current user -->
+        <div style="border-top:1px solid rgba(255,255,255,0.05);padding:14px 18px;">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="avatar" id="myAvatarSidebar" style="background:linear-gradient(135deg,#2979ff,#00d4aa);color:#fff;width:32px;height:32px;font-size:13px;"></div>
+                    <div>
+                        <div class="text-sm font-medium" style="color:#fff" id="myNameSidebar"></div>
+                        <div class="text-xs" style="color:rgba(255,255,255,0.3)">You</div>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="logout()">Leave</button>
+            </div>
+        </div>
     </div>
-
-    <script>
-        // Simple in-memory user store (replace with Laravel API calls)
-        let users = JSON.parse(localStorage.getItem('nexus_users') || '[]');
-
-        function switchTab(tab) {
-            const tabs = document.querySelectorAll('.tab-btn');
-            tabs.forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
-            document.getElementById('signupForm').classList.toggle('hidden', tab !== 'signup');
-            document.getElementById('successMsg').style.display = 'none';
-        }
-
-        function handleLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const errorEl = document.getElementById('loginError');
-            
-            const user = users.find(u => u.email === email && u.password === password);
-            
-            if (!user) {
-                errorEl.style.display = 'block';
-                return;
-            }
-            
-            errorEl.style.display = 'none';
-            sessionStorage.setItem('nexus_user', JSON.stringify(user));
-            window.location.href = 'chat.html';
-        }
-
-        function handleSignup(e) {
-            e.preventDefault();
-            const name = document.getElementById('signupName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value;
-            
-            let valid = true;
-            
-            if (!name) {
-                document.getElementById('signupNameError').style.display = 'block';
-                valid = false;
-            } else {
-                document.getElementById('signupNameError').style.display = 'none';
-            }
-            
-            if (!email || !email.includes('@')) {
-                document.getElementById('signupEmailError').style.display = 'block';
-                valid = false;
-            } else {
-                document.getElementById('signupEmailError').style.display = 'none';
-            }
-            
-            if (password.length < 6) {
-                document.getElementById('signupPasswordError').style.display = 'block';
-                valid = false;
-            } else {
-                document.getElementById('signupPasswordError').style.display = 'none';
-            }
-            
-            if (!valid) return;
-            
-            if (users.length >= 5) {
-                alert('Max 5 users reached.');
-                return;
-            }
-
-            const user = { 
-                id: Date.now(), 
-                name, 
-                email, 
-                password,
-                avatar: name.charAt(0).toUpperCase()
-            };
-            users.push(user);
-            localStorage.setItem('nexus_users', JSON.stringify(users));
-            
-            document.getElementById('successMsg').style.display = 'block';
-            document.getElementById('signupForm').reset();
-            setTimeout(() => switchTab('login'), 1500);
-        }
-
-        // Redirect if already logged in
-        if (sessionStorage.getItem('nexus_user')) {
-            window.location.href = 'chat.html';
-        }
-    </script>
-</body>
+ 
+    <!-- Chat Area -->
+    <div class="chat-area">
+        <div class="chat-header">
+            <div class="flex items-center gap-3">
+                <div>
+                    <div class="font-medium text-sm" style="color:#fff"># general</div>
+                    <div class="text-xs" style="color:rgba(255,255,255,0.3)">Group chat</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="online-dot"></div>
+                <span class="text-xs" style="color:rgba(255,255,255,0.3)" id="headerOnlineCount">1 online</span>
+            </div>
+        </div>
+ 
+        <div class="messages-container" id="messagesContainer">
+            <div class="date-divider"><span>Today</span></div>
+            <div class="system-msg">Welcome to #general — start chatting!</div>
+        </div>
+ 
+        <div class="input-area">
+            <div class="input-wrapper">
+                <textarea 
+                    class="msg-input" 
+                    id="messageInput"
+                    placeholder="Message #general..."
+                    rows="1"
+                    onkeydown="handleKeydown(event)"
+                    oninput="autoResize(this)"
+                ></textarea>
+                <button class="send-btn" onclick="sendMessage()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
 </html>
