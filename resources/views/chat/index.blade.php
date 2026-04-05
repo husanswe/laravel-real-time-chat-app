@@ -299,27 +299,6 @@
             </div>
         </div>
  
-        <!-- Rooms -->
-        <div class="py-3">
-            <div class="px-5 mb-2">
-                <span class="text-xs font-medium tracking-widest uppercase" style="color:rgba(255,255,255,0.2)">Rooms</span>
-            </div>
-            <div class="room-item active flex items-center gap-3">
-                <div class="room-dot"></div>
-                <span class="text-sm" style="color:#fff"># general</span>
-            </div>
-        </div>
- 
-        <div style="height:1px;background:rgba(255,255,255,0.04);margin:0 18px"></div>
- 
-        <!-- Online users -->
-        <div class="py-3 flex-1">
-            <div class="px-5 mb-2">
-                <span class="text-xs font-medium tracking-widest uppercase" style="color:rgba(255,255,255,0.2)">Online — <span id="onlineCount">1</span></span>
-            </div>
-            <div id="onlineUsers"></div>
-        </div>
- 
         <!-- Current user -->
         <div style="border-top:1px solid rgba(255,255,255,0.05);padding:14px 18px;">
             <div class="flex items-center justify-between">
@@ -340,7 +319,6 @@
         <div class="chat-header">
             <div class="flex items-center gap-3">
                 <div>
-                    <div class="font-medium text-sm" style="color:#fff"># general</div>
                     <div class="text-xs" style="color:rgba(255,255,255,0.3)">Group chat</div>
                 </div>
             </div>

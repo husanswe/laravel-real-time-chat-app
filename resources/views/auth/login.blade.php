@@ -116,7 +116,7 @@
         <!-- Logo -->
         <div class="flex items-center gap-3 mb-8">
             <div class="logo-icon">
-                <img src="./public/images/laravel-log.png" alt="Laravel Logo">
+                <img src="{{ asset('images/laravel-logo.png') }}">
             </div>
             <div>
                 <div style="font-family:'DM Mono',monospace" class="text-white font-medium text-lg tracking-tight"></div>
@@ -136,7 +136,7 @@
         </form>
 
         <div class="divider mt-6 mb-4"></div>
-        <p class="text-center text-xs" style="color:rgba(255,255,255,0.2)">Up to 5 users · End-to-end encrypted</p>
+        <p class="text-center text-xs" style="color:rgba(255,255,255,0.2)">End-to-end encrypted</p>
     </div>
 
 </body>
