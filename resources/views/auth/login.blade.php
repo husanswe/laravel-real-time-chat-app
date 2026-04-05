@@ -122,63 +122,18 @@
             </div>
             <div>
                 <div style="font-family:'DM Mono',monospace" class="text-white font-medium text-lg tracking-tight">Nexus</div>
-                <div class="text-xs" style="color:rgba(255,255,255,0.3)">Real-time chat</div>
+                <div class="text-xs" style="color:rgba(255,255,255,0.3)">Real-time Chat</div>
             </div>
         </div>
-
-        <!-- Tabs -->
-        <div class="flex gap-6 mb-6 border-b border-white/5 pb-0">
-            <button class="tab-btn active pb-3 text-sm font-medium" onclick="switchTab('login')">Sign in</button>
-            <button class="tab-btn pb-3 text-sm font-medium" onclick="switchTab('signup')">Create account</button>
-        </div>
-
-        <!-- Success message -->
-        <div class="success-msg mb-4" id="successMsg">Account created! You can now sign in.</div>
 
         <!-- Login Form -->
-        <form class="space-y-4" method="post" action="{{ route('authenticate') }}">
-            <div>
-                <label class="block text-xs mb-1.5" style="color:rgba(255,255,255,0.4)">Email</label>
-                <input name="email" type="email" id="loginEmail" placeholder="yourname@example.com" 
-                    class="input-field w-full rounded-xl px-4 py-3 text-sm">
-                <div class="error-msg" id="loginEmailError">Enter a valid email</div>
-            </div>
-            <div>
-                <div class="flex justify-between items-center mb-1.5">
-                    <label class="block text-xs" style="color:rgba(255,255,255,0.4)">Password</label>
-                    <a href="#" class="text-xs" style="color:#2979ff">Forgot?</a>
-                </div>
-                <input name="password" type="password" placeholder="••••••••" 
-                    class="input-field w-full rounded-xl px-4 py-3 text-sm">
-                <div class="error-msg">Invalid email or password</div>
-            </div>
+        <form class="space-y-4" method="post" action="{{ route('chat.enter') }}">
+            @csrf
+            <label class="block text-xs mb-1.5" style="color:rgba(255,255,255,0.4)">Your name</label>
+            <input name="username" type="text" placeholder="Enter your name..."
+                class="input-field w-full rounded-xl px-4 py-3 text-sm mb-4">
             <button type="submit" class="btn-primary w-full rounded-xl py-3 text-sm font-medium text-white mt-2">
-                Sign in
-            </button>
-        </form>
-
-        <!-- Signup Form -->
-        <form id="signupForm" class="space-y-4 hidden" onsubmit="handleSignup(event)">
-            <div>
-                <label class="block text-xs mb-1.5" style="color:rgba(255,255,255,0.4)">Full name</label>
-                <input type="text" id="signupName" placeholder="John Doe" 
-                    class="input-field w-full rounded-xl px-4 py-3 text-sm">
-                <div class="error-msg" id="signupNameError">Name is required</div>
-            </div>
-            <div>
-                <label class="block text-xs mb-1.5" style="color:rgba(255,255,255,0.4)">Email</label>
-                <input type="email" id="signupEmail" placeholder="you@example.com" 
-                    class="input-field w-full rounded-xl px-4 py-3 text-sm">
-                <div class="error-msg" id="signupEmailError">Enter a valid email</div>
-            </div>
-            <div>
-                <label class="block text-xs mb-1.5" style="color:rgba(255,255,255,0.4)">Password</label>
-                <input type="password" id="signupPassword" placeholder="Min. 6 characters" 
-                    class="input-field w-full rounded-xl px-4 py-3 text-sm">
-                <div class="error-msg" id="signupPasswordError">Password must be at least 6 characters</div>
-            </div>
-            <button type="submit" class="btn-primary w-full rounded-xl py-3 text-sm font-medium text-white mt-2">
-                Create account
+                Join Chat
             </button>
         </form>
 
