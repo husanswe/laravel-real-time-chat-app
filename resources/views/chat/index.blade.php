@@ -321,12 +321,6 @@
             <div class="logo-text">Laravel Real Time Chat App</div>
         </div>
  
-        <div class="section-label">Channels</div>
-        <div class="room-item active">
-            <div class="room-dot"></div>
-            # general
-        </div>
- 
         <div class="section-label">Online — <span id="onlineCount">1</span></div>
         <div id="onlineUsers"></div>
  
