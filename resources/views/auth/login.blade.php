@@ -136,10 +136,10 @@
         <div class="success-msg mb-4" id="successMsg">Account created! You can now sign in.</div>
 
         <!-- Login Form -->
-        <form id="loginForm" class="space-y-4">
+        <form class="space-y-4" method="post" action="{{ route('authenticate') }}">
             <div>
                 <label class="block text-xs mb-1.5" style="color:rgba(255,255,255,0.4)">Email</label>
-                <input type="email" id="loginEmail" placeholder="you@example.com" 
+                <input name="email" type="email" id="loginEmail" placeholder="yourname@example.com" 
                     class="input-field w-full rounded-xl px-4 py-3 text-sm">
                 <div class="error-msg" id="loginEmailError">Enter a valid email</div>
             </div>
@@ -148,9 +148,9 @@
                     <label class="block text-xs" style="color:rgba(255,255,255,0.4)">Password</label>
                     <a href="#" class="text-xs" style="color:#2979ff">Forgot?</a>
                 </div>
-                <input type="password" id="loginPassword" placeholder="••••••••" 
+                <input name="password" type="password" placeholder="••••••••" 
                     class="input-field w-full rounded-xl px-4 py-3 text-sm">
-                <div class="error-msg" id="loginError">Invalid email or password</div>
+                <div class="error-msg">Invalid email or password</div>
             </div>
             <button type="submit" class="btn-primary w-full rounded-xl py-3 text-sm font-medium text-white mt-2">
                 Sign in
