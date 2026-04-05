@@ -318,7 +318,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header">
-            <div class="logo-text">Laravel<span>Chat</span></div>
+            <div class="logo-text">Laravel Real Time Chat App</div>
         </div>
  
         <div class="section-label">Channels</div>
@@ -334,8 +334,8 @@
             <div style="display:flex;align-items:center;gap:10px;">
                 <div class="u-avatar" id="myAvatar" style="background:#ff2d20;"></div>
                 <div>
-                    <div style="font-size:15px;font-weight:500;color:#fff;" id="myName">—</div>
-                    <div style="font-size:12px;color:#4b5563;">You</div>
+                    <div style="font-size:15px;font-weight:500;color:#fff;" id="myName">{{ session('$username') }}</div>
+                    <div style="font-size:12px;color:#4b5563;">{{ session('$username') }}</div>
                 </div>
             </div>
             <form method="POST" action="{{ route('chat.leave') }}">
