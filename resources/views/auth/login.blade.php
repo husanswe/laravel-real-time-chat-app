@@ -99,25 +99,24 @@
 
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:36px;">
             <div>
-                <div class="logo-text">Laravel Real Time Chat App</div>
-                <div style="color:#4b5563;font-size:14px;margin-top:4px;">Real-time group messaging</div>
+                <div class="logo-text block w-full text-center text-wrap">Laravel Real Time Chat App</div>
             </div>
-            <div class="badge">Reverb</div>
         </div>
 
         <form method="POST" action="{{ route('chat.enter') }}">
             @csrf
             <div style="margin-bottom:20px;">
-                <label style="display:block;font-size:15px;font-weight:500;color:#9ca3af;margin-bottom:8px;">Your display name</label>
-                <input name="username" type="text" placeholder="e.g. Husan" class="input-field" autofocus required>
+                <label style="display:block;font-size:15px;font-weight:500;color:#9ca3af;margin-bottom:8px;">Your Name</label>
+                <input name="username" type="text" placeholder="e.g. Joe Schmoe" class="input-field" autofocus required>
             </div>
             <button type="submit" class="btn-primary">Join Chat →</button>
         </form>
 
         <div class="divider" style="margin:28px 0;"></div>
         <div style="display:flex;justify-content:space-between;align-items:center;">
-            <span style="color:#4b5563;font-size:14px;">Powered by Laravel Reverb</span>
-            <span style="color:#374151;font-size:13px;font-family:'Fira Code',monospace;">ws://</span>
+            <span style="color:#4b5563; font-size:14px;" class="block w-full text-center">
+                Powered by Laravel Reverb
+            </span>
         </div>
     </div>
 </body>

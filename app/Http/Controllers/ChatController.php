@@ -21,4 +21,10 @@ class ChatController extends Controller
         $request->session()->put('username', $request->username);
         return redirect()->route('chat.index');
     }
+
+    public function leave(Request $request)
+    {
+        $request->session()->forget('username');
+        return redirect()->route('chat.landing');
+    }
 }
