@@ -3,141 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laravel Real Time Chat App — Login</title>
+    <title>Laravel Real Time Chat — Join</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        * { font-family: 'DM Sans', sans-serif; }
+        * { font-family: 'Inter', sans-serif; box-sizing: border-box; }
         body {
-            background: #0a0e1a;
+            background: #0f0f0f;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
         }
-        .bg-mesh {
+        .bg-noise {
             position: fixed;
             inset: 0;
-            background: 
-                radial-gradient(ellipse 80% 60% at 20% 50%, rgba(41, 121, 255, 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 80% at 80% 20%, rgba(0, 212, 170, 0.06) 0%, transparent 60%),
-                radial-gradient(ellipse 40% 40% at 60% 80%, rgba(120, 80, 255, 0.05) 0%, transparent 50%);
+            background:
+                radial-gradient(ellipse 70% 50% at 15% 50%, rgba(255, 45, 32, 0.07) 0%, transparent 65%),
+                radial-gradient(ellipse 50% 70% at 85% 20%, rgba(255, 45, 32, 0.04) 0%, transparent 60%);
             pointer-events: none;
         }
         .grid-bg {
             position: fixed;
             inset: 0;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 48px 48px;
             pointer-events: none;
         }
         .card {
-            background: rgba(15, 20, 35, 0.85);
-            border: 1px solid rgba(255,255,255,0.07);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03);
+            background: #161616;
+            border: 1px solid #2a2a2a;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 32px 64px rgba(0,0,0,0.6);
         }
         .input-field {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            color: #e8eaf0;
-            transition: all 0.2s ease;
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            color: #e5e7eb;
+            font-size: 16px;
+            transition: all 0.2s;
             outline: none;
+            width: 100%;
+            border-radius: 8px;
+            padding: 14px 16px;
         }
         .input-field:focus {
-            border-color: rgba(41, 121, 255, 0.5);
-            background: rgba(41, 121, 255, 0.05);
-            box-shadow: 0 0 0 3px rgba(41, 121, 255, 0.08);
+            border-color: #ff2d20;
+            box-shadow: 0 0 0 3px rgba(255, 45, 32, 0.1);
         }
-        .input-field::placeholder { color: rgba(255,255,255,0.2); }
+        .input-field::placeholder { color: #4b5563; }
         .btn-primary {
-            background: linear-gradient(135deg, #2979ff 0%, #1a56e8 100%);
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 20px rgba(41, 121, 255, 0.3);
+            background: #ff2d20;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.2s;
         }
         .btn-primary:hover {
+            background: #e82516;
             transform: translateY(-1px);
-            box-shadow: 0 8px 28px rgba(41, 121, 255, 0.45);
+            box-shadow: 0 8px 24px rgba(255, 45, 32, 0.35);
         }
         .btn-primary:active { transform: translateY(0); }
-        .tab-btn {
-            transition: all 0.2s ease;
-            color: rgba(255,255,255,0.35);
-        }
-        .tab-btn.active {
-            color: #fff;
-            border-bottom: 2px solid #2979ff;
-        }
-        .logo-icon {
-            width: 42px;
-            height: 42px;
-            background: linear-gradient(135deg, #2979ff, #00d4aa);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .fade-in {
-            animation: fadeIn 0.4s ease forwards;
-        }
+        .fade-in { animation: fadeIn 0.45s ease forwards; }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-        }
-        .error-msg {
-            color: #ff6b6b;
+        .logo-text { font-family: 'Fira Code', monospace; font-size: 22px; font-weight: 500; color: #fff; }
+        .logo-text span { color: #ff2d20; }
+        .badge {
+            background: rgba(255,45,32,0.1);
+            border: 1px solid rgba(255,45,32,0.2);
+            color: #ff2d20;
             font-size: 12px;
-            margin-top: 4px;
-            display: none;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-family: 'Fira Code', monospace;
         }
-        .success-msg {
-            background: rgba(0, 212, 170, 0.08);
-            border: 1px solid rgba(0, 212, 170, 0.2);
-            color: #00d4aa;
-            border-radius: 8px;
-            padding: 10px 14px;
-            font-size: 13px;
-            display: none;
-        }
+        .divider { height: 1px; background: #2a2a2a; }
     </style>
 </head>
 <body>
-    <div class="bg-mesh"></div>
+    <div class="bg-noise"></div>
     <div class="grid-bg"></div>
 
-    <div class="card rounded-2xl w-full max-w-sm mx-4 p-8 fade-in relative z-10">
-        <!-- Logo -->
-        <div class="flex items-center gap-3 mb-8">
-            <div class="logo-icon">
-                <img src="{{ asset('images/laravel-logo.png') }}">
-            </div>
+    <div class="card rounded-2xl fade-in relative z-10" style="width:100%;max-width:420px;margin:16px;padding:40px;">
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:36px;">
             <div>
-                <div style="font-family:'DM Mono',monospace" class="text-white font-medium text-lg tracking-tight"></div>
-                <div class="text-xs" style="color:rgba(255,255,255,0.3)">Laravel Real Time Chat App</div>
+                <div class="logo-text">Laravel Real Time Chat App</div>
+                <div style="color:#4b5563;font-size:14px;margin-top:4px;">Real-time group messaging</div>
             </div>
+            <div class="badge">Reverb</div>
         </div>
 
-        <!-- Login Form -->
-        <form class="space-y-4" method="post" action="{{ route('chat.enter') }}">
+        <form method="POST" action="{{ route('chat.enter') }}">
             @csrf
-            <label class="block text-xs mb-1.5" style="color:rgba(255,255,255,0.4)">Your name</label>
-            <input name="username" type="text" placeholder="Enter your name..."
-                class="input-field w-full rounded-xl px-4 py-3 text-sm mb-4">
-            <button type="submit" class="btn-primary w-full rounded-xl py-3 text-sm font-medium text-white mt-2">
-                Join Chat
-            </button>
+            <div style="margin-bottom:20px;">
+                <label style="display:block;font-size:15px;font-weight:500;color:#9ca3af;margin-bottom:8px;">Your display name</label>
+                <input name="username" type="text" placeholder="e.g. Husan" class="input-field" autofocus required>
+            </div>
+            <button type="submit" class="btn-primary">Join Chat →</button>
         </form>
 
-        <div class="divider mt-6 mb-4"></div>
-        <p class="text-center text-xs" style="color:rgba(255,255,255,0.2)">End-to-end encrypted</p>
+        <div class="divider" style="margin:28px 0;"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="color:#4b5563;font-size:14px;">Powered by Laravel Reverb</span>
+            <span style="color:#374151;font-size:13px;font-family:'Fira Code',monospace;">ws://</span>
+        </div>
     </div>
-
 </body>
 </html>
